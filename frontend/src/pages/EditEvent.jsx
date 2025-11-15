@@ -106,7 +106,7 @@ const EditEvent = () => {
         ) : (
           <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
             {filteredEvents.map((event) => (
-              <Link to={`../../api/events/${event._id}`} key={event._id}>
+              <Link to={`${event._id}`} key={event._id}>
                 <Card event={event} />
               </Link>
             ))}

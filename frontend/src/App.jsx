@@ -10,13 +10,15 @@ import ExtractEvents from "./pages/ExtractEvents.jsx";
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./App.css";
+import EditEvent from "./pages/EditEvent.jsx";
+import EditEventDetails from "./pages/EditEventDetails.jsx";
 
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path="/login" element={<Login />} />
-        
+
         <Route
           path="/"
           element={
@@ -25,7 +27,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/map"
           element={
@@ -34,7 +36,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/events"
           element={
@@ -43,7 +45,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/tools"
           element={
@@ -52,7 +54,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/tools/add"
           element={
