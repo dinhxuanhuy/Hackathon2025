@@ -22,6 +22,7 @@ const EditEventDetails = () => {
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState(true);
+  const [attendees, setAttendees] = useState([]);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [roomSuggestions, setRoomSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -89,6 +90,7 @@ const EditEventDetails = () => {
         TimeEnd: endTime,
         Note: note,
         Type: type,
+        Attendees: attendees,
       });
       toast.success("Event updated successfully");
       navigator("/tools/edit");
@@ -115,7 +117,6 @@ const EditEventDetails = () => {
     }
   };
 
-
   // Khối loading này đã có cấu trúc đúng (flex-1)
   if (fetchLoading) {
     return (
@@ -134,10 +135,9 @@ const EditEventDetails = () => {
     // 1. Xóa items-center khỏi root div
     <div className="min-h-screen w-screen flex flex-col bg-base-200">
       <Navbar />
-      
+
       {/* 2. Thêm <main> wrapper với flex-1 và overflow-y-auto */}
       <main className="flex-1 overflow-y-auto flex flex-col items-center py-5">
-        
         {/* 3. Form của bạn (giữ nguyên w-xs) */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-xs">
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
@@ -234,9 +234,8 @@ const EditEventDetails = () => {
 
         {/* 4. Thêm "cục đệm" (spacer) để nội dung không bị Dock che */}
         <div className="h-20 flex-shrink-0"></div>
-
       </main>
-      
+
       {/* 5. Dock nằm ngoài <main> */}
       <Dock />
     </div>
