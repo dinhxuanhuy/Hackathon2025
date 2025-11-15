@@ -8,6 +8,8 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Map from "./pages/Map.jsx";
 import Events from "./pages/Events.jsx";
+import Tools from "./pages/Tools.jsx";
+import CreatEvent from "./pages/CreatEvent.jsx";
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/map" element={<Map />} />
         <Route path="/events" element={<Events />} />
+        <Route path="/tools" element={<Tools />} />
+        <Route path="/tools/add" element={<CreatEvent />} />
       </Routes>
     </div>
   );

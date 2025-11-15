@@ -10,12 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mui/x-date-pickers": "^8.18.0",
     "@tailwindcss/vite": "^4.1.17",
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "daisyui": "^5.5.4",
+    "dayjs": "^1.11.19",
     "lucide-react": "^0.553.0",
     "react": "^19.2.0",
+    "react-datetime-picker": "^7.0.1",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.6"
   },

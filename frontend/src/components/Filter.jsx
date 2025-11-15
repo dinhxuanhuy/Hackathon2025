@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Funnel } from "lucide-react";
 const Filter = () => {
   return (
     <div>
@@ -11,17 +11,20 @@ const Filter = () => {
       <div className="flex items-center justify-end">
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-md m-1">
-            Filter
+            Filter <Funnel className="size-4" />
           </div>
           <ul
             tabIndex="-1"
             className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
           >
             <li>
-              <a>Item 1</a>
+              <a>All</a>
             </li>
             <li>
-              <a>Item 2</a>
+              <a>Class</a>
+            </li>
+            <li>
+              <a>Other events</a>
             </li>
           </ul>
         </div>

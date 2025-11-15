@@ -4,6 +4,8 @@ import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
+import roomRoutes from "./routes/roomRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use("/api/events", eventRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/users", userRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

@@ -3,28 +3,30 @@ import Dock from "../components/Dock";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import Filter from "../components/Filter";
+import { useState } from "react";
+import api from "../lib/axios";
+import { useEffect } from "react";
 
 const Home = () => {
-  const events = [
-    {
-      id: 1,
-      title: "Event 1",
-      description: "Description for Event 1",
-      tier: "emergancy",
-    },
-    {
-      id: 2,
-      title: "Event 2",
-      description: "Description for Event 2",
-      tier: "incoming",
-    },
-    {
-      id: 3,
-      title: "Event 3",
-      description: "Description for Event 3",
-      tier: "Far from now",
-    },
-  ];
+  const [events, setEvents] = useState([]);
+  const [Loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const res = await api.get("/events");
+        setEvents(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+        if (error.response.status === 429) {
+        } else {
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNotes();
+  }, []);
   return (
     <div className="min-h-screen w-screen flex flex-col bg-base-200">
       <Navbar />
