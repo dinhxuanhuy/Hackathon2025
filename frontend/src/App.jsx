@@ -1,29 +1,65 @@
+// frontend/src/App.jsx
 import React from "react";
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import Dock from "./components/Dock.jsx";
-import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Map from "./pages/Map.jsx";
 import Events from "./pages/Events.jsx";
 import Tools from "./pages/Tools.jsx";
 import CreatEvent from "./pages/CreatEvent.jsx";
-import EditEvent from "./pages/EditEvent.jsx";
-import EditEventDetails from "./pages/EditEventDetails.jsx";
+import Login from "./pages/Login.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import "./App.css";
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/map" element={<Map />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/tools" element={<Tools />} />
-        <Route path="/tools/add" element={<CreatEvent />} />
-        <Route path="/tools/edit" element={<EditEvent />} />
-        <Route path="/api/events/:id" element={<EditEventDetails />} />
+        <Route path="/login" element={<Login />} />
+        
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/map"
+          element={
+            <ProtectedRoute>
+              <Map />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/events"
+          element={
+            <ProtectedRoute>
+              <Events />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/tools"
+          element={
+            <ProtectedRoute>
+              <Tools />
+            </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/tools/add"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <CreatEvent />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
