@@ -210,10 +210,10 @@ const Map = () => {
             locations={locations}
             mapInstanceRef={mapInstanceRef}
           />
-          <MapControlButton
+          {/*<MapControlButton
             placingMode={placingMode}
             onToggle={handleTogglePlacing}
-          />
+          /> */}
         </div>
       </div>
 

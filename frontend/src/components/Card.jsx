@@ -78,7 +78,7 @@ const Card = ({ event }) => {
           {statusText}
         </span>
         <div className="flex justify-between items-start gap-4">
-          <h2 className="text-5xl font-bold flex-1 leading-tight">
+          <h2 className="text-4xl font-bold flex-1 leading-tight">
             {event.EventName}
           </h2>
         </div>
