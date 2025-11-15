@@ -4,8 +4,8 @@ const Filter = ({ currentFilter, onFilterChange }) => {
   return (
     <div>
       <div className="flex items-center justify-evenly mt-5">
-        <h3 className="text-3xl font-bold text-primary tracking-tight">
-          Các sự kiện
+        <h3 className="text-4xl font-bold font-sans text-infor-content tracking-tight">
+          Events
         </h3>
       </div>
       <div className="flex items-center justify-end">
