@@ -23,7 +23,6 @@ const Home = () => {
       } catch (error) {
         console.error("Error fetching notes:", error);
         if (error.response && error.response.status === 429) {
-          // Handle rate limiting
         }
       } finally {
         setLoading(false);
@@ -79,21 +78,24 @@ const Home = () => {
     setCurrentFilter(filter);
   };
   return (
-    <div className="min-h-screen w-screen flex flex-col bg-base-200">
-      <Navbar />
-      <Filter
-        currentFilter={currentFilter}
-        onFilterChange={handleFilterChange}
-      />
-      <div className="flex-1 px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
-          {filteredEvents.map((event) => (
-            <Card event={event} key={event._id} />
-          ))}
+    <div class="absolute top-0 -z-10 h-full w-full bg-white">
+      <div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div>
+      <div className="min-h-screen w-screen flex flex-col bg-base-200">
+        <Navbar />
+        <Filter
+          currentFilter={currentFilter}
+          onFilterChange={handleFilterChange}
+        />
+        <div className="flex-1 px-4 py-8">
+          <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
+            {filteredEvents.map((event) => (
+              <Card event={event} key={event._id} />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="px-4 py-8 flex justify-center">
-        <Dock />
+        <div className="px-4 py-8 flex justify-center">
+          <Dock />
+        </div>
       </div>
     </div>
   );

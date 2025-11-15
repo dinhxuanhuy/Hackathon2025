@@ -22,7 +22,6 @@ const EditEvent = () => {
       } catch (error) {
         console.error("Error fetching notes:", error);
         if (error.response && error.response.status === 429) {
-          // Handle rate limiting
         }
       } finally {
         setLoading(false);

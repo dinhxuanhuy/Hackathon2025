@@ -52,6 +52,7 @@ const EditEventDetails = () => {
     fetchEvent();
   }, [id, navigator]);
 
+  // ... (Tất cả các hàm handle... của bạn giữ nguyên) ...
   const handleRoomSearch = async (value) => {
     setRoom(value);
     if (value.trim() === "") {
@@ -114,10 +115,11 @@ const EditEventDetails = () => {
     }
   };
 
-  // Show loading state while fetching
+
+  // Khối loading này đã có cấu trúc đúng (flex-1)
   if (fetchLoading) {
     return (
-      <div className="min-h-screen w-screen flex flex-col bg-base-200 items-center">
+      <div className="min-h-screen w-screen flex flex-col bg-base-200">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <span className="loading loading-spinner loading-lg"></span>
@@ -127,101 +129,115 @@ const EditEventDetails = () => {
     );
   }
 
+  // --- SỬA LẠI CẤU TRÚC LAYOUT TỪ ĐÂY ---
   return (
-    <div className="min-h-screen w-screen flex flex-col bg-base-200 items-center">
+    // 1. Xóa items-center khỏi root div
+    <div className="min-h-screen w-screen flex flex-col bg-base-200">
       <Navbar />
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-5">
-        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-          <legend className="fieldset-legend">Edit Event</legend>
+      
+      {/* 2. Thêm <main> wrapper với flex-1 và overflow-y-auto */}
+      <main className="flex-1 overflow-y-auto flex flex-col items-center py-5">
+        
+        {/* 3. Form của bạn (giữ nguyên w-xs) */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-xs">
+          <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
+            <legend className="fieldset-legend">Edit Event</legend>
 
-          <label className="label">Name</label>
-          <input
-            type="text"
-            className="input"
-            placeholder="Enter name..."
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-            required
-          />
-
-          <label className="label">Room</label>
-          <div className="relative">
+            <label className="label">Name</label>
             <input
               type="text"
-              className="input w-full"
-              placeholder="Enter your room..."
-              value={room}
-              onChange={(e) => handleRoomSearch(e.target.value)}
-              onFocus={() => room && setShowSuggestions(true)}
+              className="input"
+              placeholder="Enter name..."
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
               required
             />
-            {showSuggestions && roomSuggestions.length > 0 && (
-              <ul className="absolute z-10 w-full bg-base-100 border border-base-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg">
-                {roomSuggestions.map((roomItem) => (
-                  <li
-                    key={roomItem._id}
-                    className="p-3 hover:bg-base-200 cursor-pointer"
-                    onClick={() => handleSelectRoom(roomItem.RoomName)}
-                  >
-                    {roomItem.RoomName}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
 
-          <label className="label">Type</label>
-          <div className="dropdown dropdown-bottom dropdown-center">
-            <div tabIndex={0} role="button" className="btn m-1">
-              {type === true ? "Class" : "Other Events"}
+            <label className="label">Room</label>
+            <div className="relative">
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="Enter your room..."
+                value={room}
+                onChange={(e) => handleRoomSearch(e.target.value)}
+                onFocus={() => room && setShowSuggestions(true)}
+                required
+              />
+              {showSuggestions && roomSuggestions.length > 0 && (
+                <ul className="absolute z-10 w-full bg-base-100 border border-base-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg">
+                  {roomSuggestions.map((roomItem) => (
+                    <li
+                      key={roomItem._id}
+                      className="p-3 hover:bg-base-200 cursor-pointer"
+                      onClick={() => handleSelectRoom(roomItem.RoomName)}
+                    >
+                      {roomItem.RoomName}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <ul
-              tabIndex="-1"
-              className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+
+            <label className="label">Type</label>
+            <div className="dropdown dropdown-bottom dropdown-center">
+              <div tabIndex={0} role="button" className="btn m-1">
+                {type === true ? "Class" : "Other Events"}
+              </div>
+              <ul
+                tabIndex="-1"
+                className="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-sm"
+              >
+                <li>
+                  <a onClick={() => setType(true)}>Class</a>
+                </li>
+                <li>
+                  <a onClick={() => setType(false)}>Other Events</a>
+                </li>
+              </ul>
+            </div>
+
+            <label className="label">Start time</label>
+            <DateTimePicker onChange={setStartTime} value={startTime} />
+
+            <label className="label">End time</label>
+            <DateTimePicker onChange={setEndTime} value={endTime} />
+
+            <label className="label">Note</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Enter note..."
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </fieldset>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="btn btn-success flex-1"
+              disabled={loading}
             >
-              <li>
-                <a onClick={() => setType(true)}>Class</a>
-              </li>
-              <li>
-                <a onClick={() => setType(false)}>Other Events</a>
-              </li>
-            </ul>
+              {loading ? "Updating..." : "Update Event"}
+            </button>
+            <button
+              type="button"
+              className="btn btn-error"
+              onClick={handleDelete}
+              disabled={loading}
+            >
+              Delete
+            </button>
           </div>
+        </form>
 
-          <label className="label">Start time</label>
-          <DateTimePicker onChange={setStartTime} value={startTime} />
+        {/* 4. Thêm "cục đệm" (spacer) để nội dung không bị Dock che */}
+        <div className="h-20 flex-shrink-0"></div>
 
-          <label className="label">End time</label>
-          <DateTimePicker onChange={setEndTime} value={endTime} />
-
-          <label className="label">Note</label>
-          <input
-            type="text"
-            className="input"
-            placeholder="Enter note..."
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </fieldset>
-
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            className="btn btn-success flex-1"
-            disabled={loading}
-          >
-            {loading ? "Updating..." : "Update Event"}
-          </button>
-          <button
-            type="button"
-            className="btn btn-error"
-            onClick={handleDelete}
-            disabled={loading}
-          >
-            Delete
-          </button>
-        </div>
-      </form>
+      </main>
+      
+      {/* 5. Dock nằm ngoài <main> */}
       <Dock />
     </div>
   );
