@@ -51,8 +51,16 @@ export async function getEventById(req, res) {
 
 export async function createEvent(req, res) {
   try {
-    const { EventID, RoomID, EventName, TimeStart, TimeEnd, Note, Type } =
-      req.body;
+    const {
+      EventID,
+      RoomID,
+      EventName,
+      TimeStart,
+      TimeEnd,
+      Note,
+      Type,
+      Attendees,
+    } = req.body;
     const event = new Event({
       EventID,
       RoomID,
@@ -61,6 +69,7 @@ export async function createEvent(req, res) {
       TimeEnd,
       Note,
       Type,
+      Attendees,
     });
 
     const savedEvent = await event.save();
@@ -71,8 +80,16 @@ export async function createEvent(req, res) {
 }
 export async function updateEvent(req, res) {
   try {
-    const { EventID, RoomID, EventName, TimeStart, TimeEnd, Note, Type } =
-      req.body;
+    const {
+      EventID,
+      RoomID,
+      EventName,
+      TimeStart,
+      TimeEnd,
+      Note,
+      Type,
+      Attendees,
+    } = req.body;
     const updatedEvent = await Event.findByIdAndUpdate(
       req.params.id,
       {
@@ -83,6 +100,7 @@ export async function updateEvent(req, res) {
         TimeEnd,
         Note,
         Type,
+        Attendees,
       },
       {
         new: true,

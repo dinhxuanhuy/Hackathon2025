@@ -22,6 +22,9 @@ const eventSchema = new mongoose.Schema({
   Type: {
     type: Boolean,
   },
+  Attendees: {
+    type: [String],
+  },
 });
 
 const Event = mongoose.model("Event", eventSchema, "Events");
