@@ -1,10 +1,10 @@
 // Hook tùy chỉnh để quản lý map instance và routing
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import L from 'leaflet';
-import * as config from '../config.js';
-import { fetchRoute, convertCoordinates, formatRouteInfo, getInstructions } from '../services/routingService';
-import { getUserLocation } from '../services/geolocationService';
+import { MAP_CONFIG, MARKER_ICONS } from '../../config/mapConfig';
+import { fetchRoute, convertCoordinates, formatRouteInfo, getInstructions } from '../../service/routingService';
+import { getUserLocation } from '../../service/geolocationService';
 
 export function useMapInstance() {
     const mapRef = useRef(null);
@@ -17,10 +17,12 @@ export function useMapInstance() {
         if (!mapInstanceRef.current) return;
 
         const markerIcon = L.icon({
-            iconUrl: color === 'red' ? config.MARKER_ICONS.user.iconUrl : config.MARKER_ICONS.custom.iconUrl,
-            iconSize: config.MARKER_ICONS.user.iconSize,
-            iconAnchor: config.MARKER_ICONS.user.iconAnchor,
-            popupAnchor: config.MARKER_ICONS.user.popupAnchor,
+            iconUrl: color === 'red' ? MARKER_ICONS.user.iconUrl : MARKER_ICONS.custom.iconUrl,
+            iconSize: MARKER_ICONS.user.iconSize,
+            iconAnchor: MARKER_ICONS.user.iconAnchor,
+            popupAnchor: MARKER_ICONS.user.popupAnchor,
+            shadowUrl: MARKER_ICONS.user.shadowUrl,
+            shadowSize: MARKER_ICONS.user.shadowSize
         });
 
         const marker = L.marker([lat, lng], { icon: markerIcon }).addTo(mapInstanceRef.current);

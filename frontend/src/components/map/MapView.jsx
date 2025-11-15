@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import * as config from '../config.js';
-import { useMapInstance } from '../hooks/useMapInstance';
+import 'leaflet/dist/leaflet.css';
+import { MAP_CONFIG } from '../../config/mapConfig';
+import { useMapInstance } from './useMapInstance';
 
-function MapView({ onMapClick, isPlacingMarker }) {
+function MapView({ isPlacingMarker }) {
     const isPlacingMarkerRef = useRef(isPlacingMarker);
     
     const {
@@ -26,21 +27,21 @@ function MapView({ onMapClick, isPlacingMarker }) {
 
         // Khởi tạo map
         mapInstanceRef.current = L.map(mapRef.current).setView(
-            [config.MAP_CONFIG.center.lat, config.MAP_CONFIG.center.lng],
-            config.MAP_CONFIG.defaultZoom
+            [MAP_CONFIG.center.lat, MAP_CONFIG.center.lng],
+            MAP_CONFIG.defaultZoom
         );
 
         // Thêm tile layer
-        L.tileLayer(config.MAP_CONFIG.tileLayer.url, {
-            attribution: config.MAP_CONFIG.tileLayer.attribution,
-            maxZoom: config.MAP_CONFIG.tileLayer.maxZoom,
+        L.tileLayer(MAP_CONFIG.tileLayer.url, {
+            attribution: MAP_CONFIG.tileLayer.attribution,
+            maxZoom: MAP_CONFIG.tileLayer.maxZoom,
         }).addTo(mapInstanceRef.current);
 
         // Đặt marker cổng chính
         placeMarker(
-            config.MAP_CONFIG.center.lat, 
-            config.MAP_CONFIG.center.lng, 
-            "Cổng chính", 
+            MAP_CONFIG.center.lat, 
+            MAP_CONFIG.center.lng, 
+            "Cổng chính UTE", 
             'red'
         );
 
@@ -70,8 +71,8 @@ function MapView({ onMapClick, isPlacingMarker }) {
 
         window.routeFromGate = function(endLat, endLng) {
             drawRoute(
-                config.MAP_CONFIG.center.lat, 
-                config.MAP_CONFIG.center.lng, 
+                MAP_CONFIG.center.lat, 
+                MAP_CONFIG.center.lng, 
                 endLat, 
                 endLng
             );
@@ -96,7 +97,7 @@ function MapView({ onMapClick, isPlacingMarker }) {
         }
     }, [isPlacingMarker]);
 
-    return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
+    return <div ref={mapRef} className="w-full h-full" style={{ minHeight: '400px' }} />;
 }
 
 export default MapView;
