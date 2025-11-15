@@ -1,8 +1,9 @@
 // Map configuration
 export const MAP_CONFIG = {
     center: {
-        lat: 10.8509,
-        lng: 106.7718
+        lat: 10.849926,
+        lng: 106.771632
+
     },
     defaultZoom: 17,
     minZoom: 15,

@@ -1,14 +1,15 @@
+import api from '../lib/axios';
+
 // get all room by api 
 export const Rooms = async () => {
   try {
-    const response = await fetch('/api/rooms');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
+    const response = await api.get('/rooms');
+    console.log('Rooms API response:', response.data);
+    console.log('Number of rooms fetched:', response.data.length);
+    return response.data;
+
   } catch (error) {
-    console.error('There has been a problem with your fetch operation:', error);
+    console.error('Error fetching rooms:', error);
     return [];
   }
 }
