@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./App.css";
 import EditEvent from "./pages/EditEvent.jsx";
+import EditEventDetails from "./pages/EditEventDetails.jsx";
 
 const App = () => {
   return (
@@ -61,14 +62,10 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/tools/edit"
-          element={
-            <ProtectedRoute adminOnly={true}>
-              <EditEvent />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/tools/edit" element={<EditEvent />} />
+
+        {/* Route cho trang chi tiết (nơi nhận :id từ URL) */}
+        <Route path="/tools/edit/:id" element={<EditEventDetails />} />
       </Routes>
     </div>
   );
