@@ -54,6 +54,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/tools/edit"
+          element={
+            <ProtectedRoute>
+             <EditEventDetails />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/tools/add"
@@ -63,7 +71,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/tools/extract"
           element={
