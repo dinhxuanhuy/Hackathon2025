@@ -61,8 +61,12 @@ export async function createEvent(req, res) {
       Type,
       Attendees,
     } = req.body;
+
+    // Generate EventID if not provided
+    const generatedEventID = EventID || `EVT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     const event = new Event({
-      EventID,
+      EventID: generatedEventID,
       RoomID,
       EventName,
       TimeStart,
@@ -73,9 +77,41 @@ export async function createEvent(req, res) {
     });
 
     const savedEvent = await event.save();
+    console.log('Event created successfully:', savedEvent.EventID);
     res.status(201).json(savedEvent);
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.error('Error creating event:', error);
+    res.status(500).json({ 
+      message: error.message || "Error creating event",
+      details: error 
+    });
+  }
+}
+export async function createEvents(req, res) {
+  try {
+    const eventsData = req.body; // Array of events
+    
+    if (!Array.isArray(eventsData)) {
+      return res.status(400).json({ message: "Request body must be an array of events" });
+    }
+
+    // Generate EventID if not provided
+    const eventsWithIds = eventsData.map(event => ({
+      ...event,
+      EventID: event.EventID || `EVT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    }));
+
+    const createdEvents = await Event.insertMany(eventsWithIds, { ordered: false });
+    res.status(201).json({
+      message: `Successfully created ${createdEvents.length} events`,
+      events: createdEvents
+    });
+  } catch (error) {
+    console.error('Error creating batch events:', error);
+    res.status(500).json({ 
+      message: error.message || "Error creating events",
+      details: error
+    });
   }
 }
 export async function updateEvent(req, res) {

@@ -2,7 +2,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Dock from "../components/Dock";
-import { CalendarPlus, Pencil, LogOut } from "lucide-react";
+import { CalendarPlus, Pencil, LogOut, ImagePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Tools = () => {
@@ -36,16 +36,17 @@ const Tools = () => {
       <div className="grid grid-cols-2 gap-3 justify-center align-center">
         <div className={`card max-w-45 max-h-60 bg-base-100 card-md shadow-sm m-3 ${!isAdmin ? 'opacity-50' : ''}`}>
           <div className="card-body flex flex-col items-center">
-            <h2 className="card-title">
-              Add event <CalendarPlus className="size-4" />
+            <h2 className="card-title text-center">
+              Extract Events <ImagePlus className="size-4" />
             </h2>
             {!isAdmin && (
               <span className="badge badge-warning badge-sm">Admin only</span>
             )}
+            <p className="text-xs text-center text-base-content/70">Từ ảnh</p>
             <div className="justify-center card-actions">
               <button
                 onClick={(e) => {
-                  handleAdminAction("tools/add");
+                  handleAdminAction("tools/extract");
                 }}
                 className={`btn ${isAdmin ? 'btn-primary' : 'btn-disabled'}`}
                 disabled={!isAdmin}
