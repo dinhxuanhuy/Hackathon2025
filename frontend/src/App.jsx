@@ -58,10 +58,11 @@ const App = () => {
           path="/tools/edit"
           element={
             <ProtectedRoute>
-             <EditEventDetails />
+              <EditEvent />
             </ProtectedRoute>
           }
         />
+        <Route path="/tools/edit/:id" element={<EditEventDetails />} />
 
         <Route
           path="/tools/add"
