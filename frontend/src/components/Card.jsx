@@ -68,7 +68,7 @@ const Card = ({ event }) => {
 
   // --- THÊM: Format thời gian bằng dayjs ---
   const formattedStart = dayjs(event.TimeStart).format("DD/MM/YYYY HH:mm");
-  const formattedEnd = dayjs(event.TimeEnd).format("HH:mm");
+  const formattedEnd = dayjs(event.TimeEnd).format("DD/MM/YYYY HH:mm");
 
   return (
     <div className="card w-full min-h-60 bg-base-100 shadow-sm">
@@ -81,25 +81,19 @@ const Card = ({ event }) => {
           <h2 className="text-5xl font-bold flex-1 leading-tight">
             {event.EventName}
           </h2>
-          <span className="text-3xl whitespace-nowrap"> </span>{" "}
-          {/*ghi gi thi ghi*/}
         </div>
+        <div className="text-lg">Phòng: {event.RoomID}</div>
         <ul className="mt-8 flex flex-col gap-3 text-lg">
           <li>
             <span>
-              {" "}
-              {/* <-- SỬA LẠI: Dùng biến đã format */}
-              {formattedStart} - {formattedEnd}
+              {formattedStart} - <br /> {formattedEnd}
             </span>
-          </li>
-          <li>
-            <span>{event.Note}</span>
           </li>
         </ul>
         <div className="mt-auto pt-8">
           <button
             onClick={(e) => {
-              navigate("map");
+              navigator(`/map?room=${encodeURIComponent(event.RoomID)}`);
             }}
             className="btn btn-primary btn-block btn-xl text-xl py-7 px-4"
           >

@@ -92,3 +92,38 @@ export async function deleteUser(req, res) {
     res.status(500).json({ message: "Server Error" });
   }
 }
+// backend/src/controllers/usersController.js - Add this function
+export async function loginUser(req, res) {
+  try {
+    const { UserID, UserPassword } = req.body;
+
+    if (!UserID || !UserPassword) {
+      return res.status(400).json({ message: "UserID và Password là bắt buộc" });
+    }
+
+    // Find user by UserID
+    const user = await User.findOne({ UserID: UserID });
+
+    if (!user) {
+      return res.status(401).json({ message: "User ID không tồn tại" });
+    }
+
+    // Simple password check (in production, use bcrypt)
+    if (user.UserPassword !== UserPassword) {
+      return res.status(401).json({ message: "Mật khẩu không đúng" });
+    }
+
+    // Return user data (exclude password)
+    const userData = {
+      _id: user._id,
+      UserID: user.UserID,
+      UserName: user.UserName,
+      Role: user.Role,
+    };
+
+    res.status(200).json(userData);
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Lỗi server khi đăng nhập" });
+  }
+}

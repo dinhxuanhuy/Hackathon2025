@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Dock from "../components/Dock";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
-import Filter from "../components/Filter";
-import { useState } from "react";
+import FilterOnly from "../components/FilterOnly";
 import api from "../lib/axios";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+const EditEvent = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
-  const [Loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [currentFilter, setCurrentFilter] = useState("all");
 
   useEffect(() => {
@@ -77,28 +76,48 @@ const Home = () => {
   const handleFilterChange = (filter) => {
     setCurrentFilter(filter);
   };
-  return (
-    <div class="absolute top-0 -z-10 h-full w-full bg-white">
-      <div class="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(173,109,244,0.5)] opacity-50 blur-[80px]"></div>
+
+  if (loading) {
+    return (
       <div className="min-h-screen w-screen flex flex-col bg-base-200">
         <Navbar />
-        <Filter
-          currentFilter={currentFilter}
-          onFilterChange={handleFilterChange}
-        />
-        <div className="flex-1 px-4 py-8">
-          <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
-            {filteredEvents.map((event) => (
-              <Card event={event} key={event._id} />
-            ))}
-          </div>
+        <div className="flex-1 flex items-center justify-center">
+          <span className="loading loading-spinner loading-lg"></span>
         </div>
         <div className="px-4 py-8 flex justify-center">
           <Dock />
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen w-screen flex flex-col bg-base-200">
+      <Navbar />
+      <FilterOnly
+        currentFilter={currentFilter}
+        onFilterChange={handleFilterChange}
+      />
+      <div className="flex-1 px-4 py-8">
+        {filteredEvents.length === 0 ? (
+          <div className="text-center text-gray-500 mt-10">
+            <p className="text-xl">Không có sự kiện nào</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
+            {filteredEvents.map((event) => (
+              <Link to={`${event._id}`} key={event._id}>
+                <Card event={event} />
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="px-4 py-8 flex justify-center">
+        <Dock />
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default EditEvent;

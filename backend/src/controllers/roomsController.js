@@ -22,3 +22,15 @@ export async function getRoomById(req, res) {
     res.status(500).json({ message: "Server Error" });
   }
 }
+
+export async function searchRooms(req, res) {
+  try {
+    const query = req.query.search || "";
+    const rooms = await Room.find({
+      RoomName: { $regex: query, $options: "i" },
+    }).limit(10);
+    res.status(200).json(rooms);
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+}
