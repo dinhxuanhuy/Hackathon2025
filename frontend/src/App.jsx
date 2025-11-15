@@ -6,6 +6,7 @@ import Map from "./pages/Map.jsx";
 import Events from "./pages/Events.jsx";
 import Tools from "./pages/Tools.jsx";
 import CreatEvent from "./pages/CreatEvent.jsx";
+import ExtractEvents from "./pages/ExtractEvents.jsx";
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./App.css";
@@ -62,10 +63,15 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/tools/edit" element={<EditEvent />} />
-
-        {/* Route cho trang chi tiết (nơi nhận :id từ URL) */}
-        <Route path="/tools/edit/:id" element={<EditEventDetails />} />
+        
+        <Route
+          path="/tools/extract"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <ExtractEvents />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
