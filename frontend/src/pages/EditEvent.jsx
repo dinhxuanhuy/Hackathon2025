@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Dock from "../components/Dock";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
-import Filter from "../components/Filter";
-import { useState } from "react";
+import FilterOnly from "../components/FilterOnly";
 import api from "../lib/axios";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+const EditEvent = () => {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
-  const [Loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [currentFilter, setCurrentFilter] = useState("all");
 
   useEffect(() => {
@@ -78,19 +77,42 @@ const Home = () => {
   const handleFilterChange = (filter) => {
     setCurrentFilter(filter);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen w-screen flex flex-col bg-base-200">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+        <div className="px-4 py-8 flex justify-center">
+          <Dock />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-screen flex flex-col bg-base-200">
       <Navbar />
-      <Filter
+      <FilterOnly
         currentFilter={currentFilter}
         onFilterChange={handleFilterChange}
       />
       <div className="flex-1 px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
-          {filteredEvents.map((event) => (
-            <Card event={event} key={event._id} />
-          ))}
-        </div>
+        {filteredEvents.length === 0 ? (
+          <div className="text-center text-gray-500 mt-10">
+            <p className="text-xl">Không có sự kiện nào</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
+            {filteredEvents.map((event) => (
+              <Link to={`../../api/events/${event._id}`} key={event._id}>
+                <Card event={event} />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
       <div className="px-4 py-8 flex justify-center">
         <Dock />
@@ -99,4 +121,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default EditEvent;

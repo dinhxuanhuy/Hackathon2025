@@ -1,27 +1,56 @@
-import React, { useState } from "react"; // Sửa: import useState đúng cách
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Dock from "../components/Dock";
 import DateTimePicker from "react-datetime-picker";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
 
-// THÊM VÀO: Bạn sẽ cần CSS cho picker để nó hiển thị đúng
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const CreatEvent = () => {
+const EditEventDetails = () => {
+  const { id } = useParams();
   const navigator = useNavigate();
+
+  // State for form fields
   const [eventName, setEventName] = useState("");
   const [room, setRoom] = useState("");
   const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date()); // Thêm state cho EndTime
+  const [endTime, setEndTime] = useState(new Date());
   const [note, setNote] = useState("");
-  const [type, setType] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState(true);
+  const [fetchLoading, setFetchLoading] = useState(true);
   const [roomSuggestions, setRoomSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Fetch event data when component mounts
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const res = await api.get(`/events/${id}`);
+        const event = res.data;
+
+        // Update all state values with fetched data
+        setEventName(event.EventName || "");
+        setRoom(event.RoomID || "");
+        setStartTime(new Date(event.TimeStart));
+        setEndTime(new Date(event.TimeEnd));
+        setNote(event.Note || "");
+        setType(event.Type || null);
+      } catch (error) {
+        console.error("Error fetching event:", error);
+        toast.error("Failed to fetch event");
+        navigator("/tools/edit"); // Navigate back if fetch fails
+      } finally {
+        setFetchLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [id, navigator]);
 
   const handleRoomSearch = async (value) => {
     setRoom(value);
@@ -48,18 +77,10 @@ const CreatEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newEvent = {
-      EventID: 1,
-      RoomID: room,
-      EventName: eventName,
-      TimeStart: startTime,
-      TimeEnd: endTime,
-      Note: note,
-      Type: type,
-    };
     setLoading(true);
+
     try {
-      await api.post("/events", {
+      await api.put(`/events/${id}`, {
         EventID: 1,
         RoomID: room,
         EventName: eventName,
@@ -68,23 +89,50 @@ const CreatEvent = () => {
         Note: note,
         Type: type,
       });
-      toast.success("Note created successfully");
-      navigator("/");
+      toast.success("Event updated successfully");
+      navigator("/tools/edit");
     } catch (error) {
-      console.log("Error creating note:", error);
-      toast.error("Failed to create note");
+      console.log("Error updating event:", error);
+      toast.error("Failed to update event");
     } finally {
       setLoading(false);
     }
-    console.log("Submitting Event:", newEvent);
   };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this event?")) {
+      return;
+    }
+
+    try {
+      await api.delete(`/events/${id}`);
+      toast.success("Event deleted successfully");
+      navigator("/tools/edit");
+    } catch (error) {
+      console.log("Error deleting event:", error);
+      toast.error("Failed to delete event");
+    }
+  };
+
+  // Show loading state while fetching
+  if (fetchLoading) {
+    return (
+      <div className="min-h-screen w-screen flex flex-col bg-base-200 items-center">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+        <Dock />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-screen flex flex-col bg-base-200 items-center">
       <Navbar />
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-5">
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-          <legend className="fieldset-legend">New Event</legend>
+          <legend className="fieldset-legend">Edit Event</legend>
 
           <label className="label">Name</label>
           <input
@@ -93,7 +141,35 @@ const CreatEvent = () => {
             placeholder="Enter name..."
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
+            required
           />
+
+          <label className="label">Room</label>
+          <div className="relative">
+            <input
+              type="text"
+              className="input w-full"
+              placeholder="Enter your room..."
+              value={room}
+              onChange={(e) => handleRoomSearch(e.target.value)}
+              onFocus={() => room && setShowSuggestions(true)}
+              required
+            />
+            {showSuggestions && roomSuggestions.length > 0 && (
+              <ul className="absolute z-10 w-full bg-base-100 border border-base-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg">
+                {roomSuggestions.map((roomItem) => (
+                  <li
+                    key={roomItem._id}
+                    className="p-3 hover:bg-base-200 cursor-pointer"
+                    onClick={() => handleSelectRoom(roomItem.RoomName)}
+                  >
+                    {roomItem.RoomName}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
           <label className="label">Type</label>
           <div className="dropdown dropdown-bottom dropdown-center">
             <div tabIndex={0} role="button" className="btn m-1">
@@ -112,37 +188,10 @@ const CreatEvent = () => {
             </ul>
           </div>
 
-          <label className="label">Room</label>
-          <div className="relative">
-            <input
-              type="text"
-              className="input w-full"
-              placeholder="Enter your room..."
-              value={room}
-              onChange={(e) => handleRoomSearch(e.target.value)}
-              onFocus={() => room && setShowSuggestions(true)}
-            />
-            {showSuggestions && roomSuggestions.length > 0 && (
-              <ul className="absolute z-10 w-full bg-base-100 border border-base-300 rounded-md mt-1 max-h-40 overflow-y-auto shadow-lg">
-                {roomSuggestions.map((roomItem) => (
-                  <li
-                    key={roomItem._id}
-                    className="p-3 hover:bg-base-200 cursor-pointer"
-                    onClick={() => handleSelectRoom(roomItem.RoomName)}
-                  >
-                    {roomItem.RoomName}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
           <label className="label">Start time</label>
-          {/* SỬA: Bỏ input text, dùng Picker và state 'startTime' */}
           <DateTimePicker onChange={setStartTime} value={startTime} />
 
           <label className="label">End time</label>
-          {/* SỬA: Bỏ input text, dùng Picker và state 'endTime' */}
           <DateTimePicker onChange={setEndTime} value={endTime} />
 
           <label className="label">Note</label>
@@ -154,11 +203,28 @@ const CreatEvent = () => {
             onChange={(e) => setNote(e.target.value)}
           />
         </fieldset>
-        <input type="submit" value="Submit" className="btn btn-success" />
+
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            className="btn btn-success flex-1"
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update Event"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-error"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            Delete
+          </button>
+        </div>
       </form>
       <Dock />
     </div>
   );
 };
 
-export default CreatEvent;
+export default EditEventDetails;

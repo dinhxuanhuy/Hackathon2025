@@ -81,19 +81,13 @@ const Card = ({ event }) => {
           <h2 className="text-5xl font-bold flex-1 leading-tight">
             {event.EventName}
           </h2>
-          <span className="text-3xl whitespace-nowrap"> </span>{" "}
-          {/*ghi gi thi ghi*/}
         </div>
+        <div className="text-lg">Phòng: {event.RoomID}</div>
         <ul className="mt-8 flex flex-col gap-3 text-lg">
           <li>
             <span>
-              {" "}
-              {/* <-- SỬA LẠI: Dùng biến đã format */}
               {formattedStart} - {formattedEnd}
             </span>
-          </li>
-          <li>
-            <span>{event.Note}</span>
           </li>
         </ul>
         <div className="mt-auto pt-8">

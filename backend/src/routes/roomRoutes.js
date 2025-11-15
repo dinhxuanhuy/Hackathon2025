@@ -1,8 +1,13 @@
 import express from "express";
-import { getAllRooms, getRoomById } from "../controllers/roomsController.js";
+import {
+  getAllRooms,
+  getRoomById,
+  searchRooms,
+} from "../controllers/roomsController.js";
 
 const router = express.Router();
 
+router.get("/search", searchRooms);
 router.get("/", getAllRooms);
 router.get("/:id", getRoomById);
 

@@ -36,27 +36,14 @@ const Tools = () => {
               Edit event <Pencil className="size-4" />
             </h2>
             <div className="justify-center card-actions">
-              <button className="btn btn-primary">Select</button>
-            </div>
-          </div>
-        </div>
-        <div className="card max-w-45 max-h-60 bg-base-100 card-md shadow-sm m-3">
-          <div className="card-body">
-            <h2 className="card-title">
-              Add event <CalendarPlus className="size-4" />
-            </h2>
-            <div className="justify-center card-actions">
-              <button className="btn btn-primary">Select</button>
-            </div>
-          </div>
-        </div>
-        <div className="card max-w-45 max-h-60 bg-base-100 card-md shadow-sm m-3">
-          <div className="card-body">
-            <h2 className="card-title">
-              Add event <CalendarPlus className="size-4" />
-            </h2>
-            <div className="justify-center card-actions">
-              <button className="btn btn-primary">Select</button>
+              <button
+                onClick={(e) => {
+                  navigate("tools/edit");
+                }}
+                className="btn btn-primary"
+              >
+                Select
+              </button>
             </div>
           </div>
         </div>

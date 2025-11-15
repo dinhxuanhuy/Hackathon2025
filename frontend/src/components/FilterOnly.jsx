@@ -1,5 +1,6 @@
 import React from "react";
 import { Funnel } from "lucide-react";
+
 const Filter = ({ currentFilter, onFilterChange }) => {
   return (
     <div>
