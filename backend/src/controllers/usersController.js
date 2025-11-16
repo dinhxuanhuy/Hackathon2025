@@ -48,37 +48,24 @@ export async function createUser(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
+
 export async function updateUser(req, res) {
   try {
-    const {
-      UserID,
-      UserPassword,
-      Role,
-      EndTimeGiuXe,
-      StartTimeGiuXe,
-      TotalFare,
-      UserName,
-    } = req.body;
+    const updateData = req.body;
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      {
-        UserID,
-        UserPassword,
-        Role,
-        EndTimeGiuXe,
-        StartTimeGiuXe,
-        TotalFare,
-        UserName,
-      },
+      { $set: updateData },
       {
         new: true,
+        runValidators: true, 
       }
     );
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "User updated" });
+    res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -98,7 +85,9 @@ export async function loginUser(req, res) {
     const { UserID, UserPassword } = req.body;
 
     if (!UserID || !UserPassword) {
-      return res.status(400).json({ message: "UserID và Password là bắt buộc" });
+      return res
+        .status(400)
+        .json({ message: "UserID và Password là bắt buộc" });
     }
 
     // Find user by UserID
