@@ -304,6 +304,7 @@ Contributions, issues và feature requests luôn được chào đón!
 ## 👥 Nhóm phát triển
 
 - **Đinh Xuân Huy** - [@dinhxuanhuy](https://github.com/dinhxuanhuy)
+- **Đặng Gia Nguyên** - [@GERnguyen](https://github.com/GERnguyen)
 
 ## 📄 Giấy phép
 
